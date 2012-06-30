@@ -1,0 +1,42 @@
+<html><head><title>WAR IS PEACE</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script>
+var pickRandom = function(lst) { return lst[Math.floor(lst.length * Math.random())]; };
+
+var nextWordFunctionInText = function(wordSequence) {
+  var allFourths = function(a,b,c) { return wordSequence.filter(function(w,i) { return Math.min(i,3)==3 && wordSequence[i-3]==a && wordSequence[i-2]==b && wordSequence[i-1]==c; }); };
+  return function(a,b,c) { return pickRandom(allFourths(a,b,c)); };  // O(n), but n is small.
+};
+
+
+$(function() {
+  $("#dissociation").text("Fetching Orwell from Gutenberg Australia via Coral CDN via Anyorigin.com, please wait...");
+  $.getJSON('http://anyorigin.com/get?url=http%3A//gutenberg.net.au.nyud.net/ebooks01/0100021.txt&callback=?', function(data){
+    $("#dissociation").text("rendering...");
+    var words = data.contents.replace(/\r/g,"").split("\n").slice(53,10338).join(" ~ ").split(" ").filter(function(s) { return Math.max(s.length,0) != 0 });
+    $("#dissociation").text("");
+    var pickFourth = nextWordFunctionInText(words);
+
+    var reformat = function(w) { return w=="~" ? document.createElement("br") : (w.match(/[A-Z]{2,}/) ? $(document.createElement("b")).text(w) : w) };
+    var addWord = function(w) { $("#dissociation").append(reformat(w)).append(" "); console.log(w); };
+    var a = "WAR";
+    var b = "IS";
+    var c = "PEACE";
+    var d = "";
+    var i = 500;
+    addWord(a); addWord(b); addWord(c);
+    while(Math.max(i--,0) != 0) {
+      d = pickFourth(a,b,c);
+      addWord(d);
+      a = b;
+      b = c;
+      c = d;
+    }
+  });
+});
+</script>
+</head>
+<body>
+<h1>Markov-chain-generated text based on 1984</h1>
+<div id="dissociation"></div>
+</body></html>
