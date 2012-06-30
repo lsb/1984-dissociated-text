@@ -11,7 +11,7 @@ var nextWordFunctionInText = function(wordSequence) {
 
 $(function() {
   $("#dissociation").text("Fetching Orwell from Gutenberg Australia via Coral CDN via Anyorigin.com, please wait...");
-  $.getJSON('http://anyorigin.com/get?url=http%3A//gutenberg.net.au.nyud.net/ebooks01/0100021.txt&callback=?', function(data){
+  $.getJSON('http://anyorigin.com/get/?url=http%3A//gutenberg.net.au.nyud.net/ebooks01/0100021.txt&callback=?', function(data){
     $("#dissociation").text("rendering...");
     var words = data.contents.replace(/\r/g,"").split("\n").slice(53,10338).join(" ~ ").split(" ").filter(function(s) { return Math.max(s.length,0) != 0 });
     $("#dissociation").text("");
